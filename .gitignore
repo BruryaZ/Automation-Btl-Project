@@ -1,0 +1,23 @@
+# קבצים זמניים של מערכת
+.DS_Store
+Thumbs.db
+
+# תיקיות של סביבת פיתוח
+node_modules/
+dist/
+build/
+
+# קבצים זמניים של IDE
+.idea/
+.vscode/
+
+# קבצי לוג ו-cache
+*.log
+.cache/
+*.tmp
+
+# קבצי קומפילציה
+*.class
+*.pyc
+*.o
+*.exe
