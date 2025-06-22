@@ -16,14 +16,14 @@ import java.time.format.DateTimeFormatter;
 
 public class ExtentReportExtension implements BeforeEachCallback, AfterTestExecutionCallback, AfterAllCallback {
     private static ExtentTest extentTest;
-    private String testName;
 
     @Override
     public void beforeEach(ExtensionContext context)  {
-        testName = context.getDisplayName().replaceAll("[^a-zA-Z0-9]", "_");
+        String testName = context.getDisplayName().replaceAll("[^a-zA-Z0-9]", "_");
         extentTest = ReportManager.getExtent().createTest(testName);
         ExtentReportManager.setTest(extentTest);
     }
+
     @Override
     public void afterAll(ExtensionContext context)  {
         ReportManager.flushReport();

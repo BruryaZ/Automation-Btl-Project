@@ -1,4 +1,6 @@
-package Enums;
+package enums;
+
+import org.openqa.selenium.By;
 
 public enum MENUS {
     SEARCH_BOX("TopQuestions"),
@@ -11,20 +13,17 @@ public enum MENUS {
     PERSONAL_SERVICE("ctl00_Topmneu_HyperLink9"),
     PAYMENTS("ctl00_Topmneu_HyperLink1");
 
-    private final String displayName;
+    private final String id;
 
-    // קונסטרקטור ל-Enum עם ערך מחרוזת
-    MENUS(String displayName) {
-        this.displayName = displayName;
+    MENUS(String id) {
+        this.id = id;
     }
 
-    // קונסטרקטור ל-Enum ללא ערך מחרוזת
-    MENUS() {
-        this.displayName = name(); // אם אין ערך, נשתמש בשם ה-Enum
-    }
-
-    // מתודה לקבלת השם המוצג
     public String getDisplayName() {
-        return displayName;
+        return id;
+    }
+
+    public By getBy() {
+        return By.id(id);
     }
 }
