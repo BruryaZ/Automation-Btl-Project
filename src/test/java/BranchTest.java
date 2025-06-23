@@ -2,21 +2,19 @@ import com.aventstack.extentreports.ExtentTest;
 import drivers.DriverManager;
 import junitExtensions.ExtentReportExtension;
 import junitExtensions.WebDriverExtension;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import pageObject.BranchesEntryPage;
 import pageObject.BranchesPage;
-import pageObject.BtlPageObject;
 import reports.ExtentReportManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({ExtentReportExtension.class, WebDriverExtension.class})
 public class BranchTest {
+
     @Test
     public void branchTest() {
         ExtentTest test = ExtentReportManager.getTest();
@@ -30,12 +28,12 @@ public class BranchTest {
             throw e;
         }
 
-        BtlPageObject btlPageObject = new BtlPageObject(driver);
+        BranchesEntryPage branchesEntryPage = new BranchesEntryPage(driver);
         BranchesPage branchesPage;
 
         try {
             test.info("מעבר לעמוד סניפים וערוצי שירות");
-            branchesPage = btlPageObject.getBranchesPage();
+            branchesPage = branchesEntryPage.getBranchesPage(); // שימוש ב־BranchesEntryPage
 
             String title = driver.getTitle();
             assertTrue(title.equals("סניפים וערוצי שירות | ביטוח לאומי"));

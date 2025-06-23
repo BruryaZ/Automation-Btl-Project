@@ -10,7 +10,6 @@ import utils.WaitUtils;
 import java.util.List;
 
 public class BranchesPage extends BtlPageObject {
-
     @FindBy(id = "SnifimTabs")
     private WebElement branchesContainer;
 

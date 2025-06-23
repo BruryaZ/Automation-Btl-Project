@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import pageObject.BtlPageObject;
+import pageObject.SearchPage;
 import reports.ExtentReportManager;
 
 @ExtendWith({ExtentReportExtension.class, WebDriverExtension.class})
@@ -22,8 +23,8 @@ public class SearchTest {
         test.pass("האתר נפתח בהצלחה");
 
         test.info("מבצעים חיפוש של הביטוי: \"חישוב סכום דמי לידה ליום\"");
-        BtlPageObject btlPageObject = new BtlPageObject(driver);
-        btlPageObject.initSearchBox("חישוב סכום דמי לידה ליום");
+        SearchPage searchPage = new SearchPage(driver);
+        searchPage.search("חישוב סכום דמי לידה ליום");
         test.pass("החיפוש בוצע");
 
         String pageTitle = driver.getTitle();
