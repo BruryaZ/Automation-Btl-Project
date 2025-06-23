@@ -18,7 +18,6 @@ public class SearchPage extends BtlPageObject {
     public SearchPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
-        PageFactory.initElements(driver, this);
     }
 
     public void search(String value) {
@@ -26,4 +25,3 @@ public class SearchPage extends BtlPageObject {
         WaitUtils.waitForClickAbilityByElement(driver, glassButton, 10).click();
     }
 }
-

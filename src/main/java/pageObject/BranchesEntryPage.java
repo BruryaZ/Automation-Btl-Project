@@ -7,13 +7,12 @@ import org.openqa.selenium.support.PageFactory;
 import utils.WaitUtils;
 
 public class BranchesEntryPage extends BtlPageObject {
-
     @FindBy(id = "ctl00_Topmneu_BranchesHyperLink")
     private WebElement branchesButton;
 
     public BranchesEntryPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
+        this.driver = driver;
     }
 
     public BranchesPage getBranchesPage() {

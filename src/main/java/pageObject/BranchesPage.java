@@ -15,7 +15,7 @@ public class BranchesPage extends BtlPageObject {
 
     public BranchesPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this); // חובה לאתחול @FindBy
+        this.driver = driver;
     }
 
     public void selectBranch(int index) {

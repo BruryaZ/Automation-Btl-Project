@@ -4,96 +4,83 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import utils.ElementAction;
 import utils.WaitUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class InsuranceCalculatorPage extends BtlPageObject{
-    private WebDriver driver;
+public class InsuranceCalculatorPage extends BtlPageObject {
+    @FindBy(xpath = "//*[@id=\"ctl00_Topmneu_Benefits\"]/div/div[1]/div[5]/ul/li[1]/a")
+    private WebElement unemployment;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_employeType_2")
-    private WebElement bachurRadio;
+    @FindBy(xpath = "//*[@id=\"mainContent\"]/div[1]/div[2]/span/div[2]/div[3]/a/strong")
+    private WebElement calcUnemployment;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_Gender_0")
-    private WebElement genderRadio;
+    @FindBy(xpath = "//*[@id=\"ctl00_PlaceHolderMain_SiteNodesControl_ChildrensDiv\"]/ul/li[2]/a")
+    private WebElement calcUnemployment2;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_DynDatePicker_BirthDate_Date")
-    private WebElement birthDateInput;
+    @FindBy(id = "ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_DynDatePicker_PiturimDate_Date")
+    private WebElement date;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StartNavigationTemplateContainerID_StartNextButton")
-    private WebElement continueButtonStep1;
+    @FindBy(id = "ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_rdb_age_1")
+    private WebElement on28;
 
-    @FindBy(xpath = "//*[@id=\"header\" and contains(normalize-space(), 'צעד שני')]")
-    private WebElement stepTwoTitle;
+    @FindBy(id = "ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_StartNavigationTemplateContainerID_StartNextButton")
+    private WebElement continue1;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_GetNechut_1")
-    private WebElement noDisabilityRadio;
+    @FindBy(xpath = "//*[@id=\"ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_IncomeGrid\"]/tbody")
+    private WebElement fathersSalaries;
 
-    @FindBy(id = "ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StepNavigationTemplateContainerID_StepNextButton")
-    private WebElement nextStepButton;
+    @FindBy(id = "ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_StepNavigationTemplateContainerID_StepNextButton")
+    private WebElement continue2;
 
-    @FindBy(xpath = "//*[@id=\"header\" and contains(normalize-space(), 'סיום')]")
-    private WebElement finishTitle;
-
-    @FindBy(className = "CalcResult")
-    private WebElement resultContainer;
+    @FindBy(xpath = "//*[@id=\"ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_StepDiv3\"]/h3")
+    private WebElement calcResults;
 
     public InsuranceCalculatorPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
-        PageFactory.initElements(driver, this);
     }
 
-    public void fillStepOne(String date) {
-        WaitUtils.waitForClickAbilityByElement(driver, bachurRadio, 10).click();
-        WaitUtils.waitForClickAbilityByElement(driver, genderRadio, 10).click();
-        WaitUtils.waitForVisibility(driver, birthDateInput, 10).sendKeys(date);
-        WaitUtils.waitForClickAbilityByElement(driver, continueButtonStep1, 10).click();
+    public void chooseUnemployment() {
+        WaitUtils.waitForClickAbilityByElement(driver, unemployment, 10).click();
     }
 
-    public void selectGender() {
-        WaitUtils.waitForClickAbilityByElement(driver, genderRadio, 10).click();
+    public void chooseCalcUnemployment() {
+        WaitUtils.waitForClickAbilityByElement(driver, calcUnemployment, 10).click();
     }
 
-    public void enterBirthDate(String date) {
-        WaitUtils.waitForVisibility(driver, birthDateInput, 10).sendKeys(date);
+    public void chooseCalcUnemployment2() {
+        WaitUtils.waitForClickAbilityByElement(driver, calcUnemployment2, 10).click();
     }
 
-    public void selectBachur() {
-        WaitUtils.waitForClickAbilityByElement(driver, bachurRadio, 10).click();
+    public void fillDate(String dateOfWorkStoppage) {
+        WaitUtils.waitForVisibility(driver, date, 10).sendKeys(dateOfWorkStoppage);
     }
 
-    public void clickContinueStep1() {
-        WaitUtils.waitForClickAbilityByElement(driver, continueButtonStep1, 10).click();
+    public void chooseOn28() {
+        WaitUtils.waitForClickAbilityByElement(driver, on28, 10).click();
     }
 
-    public void isStepTwo(){
-        WaitUtils.waitForVisibility(driver, stepTwoTitle, 10);
+    public void setContinue1(){
+        WaitUtils.waitForClickAbilityByElement(driver, continue1, 10).click();
     }
 
-    public void selectNoDisability() {
-        ElementAction.scrollAndClick(driver, noDisabilityRadio);
-    }
-
-    public void clickContinueStep2(){
-        WaitUtils.waitForClickAbilityByElement(driver, nextStepButton, 10).click();
-    }
-
-    public boolean isFinishScreenVisible() {
-        return WaitUtils.waitForVisibility(driver, finishTitle, 10).getText().contains("סיום");
-    }
-
-    public List<String> getResults() {
-        WaitUtils.waitForVisibility(driver, resultContainer, 10);
-        List<WebElement> lis = resultContainer.findElements(By.tagName("li"));
-        List<String> results = new ArrayList<>();
-        for (WebElement li : lis) {
-            results.add(li.getText());
+    public void setSalaries(List<Integer> salariesList){
+        List<WebElement> salaries = WaitUtils.waitForMultipleElementsInElement(driver, fathersSalaries, By.className("txtbox_sallary"), 30);
+        for (int i = 0; i < salaries.size(); i++) {
+            salaries.get(i).sendKeys(salariesList.get(i).toString());
         }
-        return results;
+    }
+
+    public void setContinue2(){
+        WaitUtils.waitForClickAbilityByElement(driver, continue2, 10).click();
+    }
+
+    public WebElement isCalcResult() {
+          return  WaitUtils.waitForVisibility(driver, calcResults, 10);
+    }
+
+    public void checkCalcResult(){
+
     }
 }
-

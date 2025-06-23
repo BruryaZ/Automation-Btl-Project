@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class WaitUtils {
 
@@ -43,5 +44,13 @@ public class WaitUtils {
     public static void waitForTitleContains(WebDriver driver, String partialTitle, int timeoutSeconds) {
         new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds))
                 .until(ExpectedConditions.titleContains(partialTitle));
+    }
+
+    public static List<WebElement> waitForMultipleElementsInElement(WebDriver driver, WebElement parentElement, By childLocator, int timeoutSeconds) {
+        return new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds))
+                .until(driver1 -> {
+                    List<WebElement> elements = parentElement.findElements(childLocator);
+                    return elements.isEmpty() ? null : elements;
+                });
     }
 }

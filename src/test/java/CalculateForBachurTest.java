@@ -6,19 +6,21 @@ import junitExtensions.WebDriverExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
-import pageObject.BtlPageObject;
-import pageObject.InsuranceCalculatorPage;
+import org.openqa.selenium.WebElement;
+import pageObject.InsuranceCalculatorPageForBachur;
 import reports.ExtentReportManager;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({ExtentReportExtension.class, WebDriverExtension.class})
 public class CalculateForBachurTest {
+
     @Test
     public void insurancePremiumCalculationForBachur() {
         WebDriver driver = DriverManager.getDriver();
         ExtentTest test = ExtentReportManager.getTest();
-        InsuranceCalculatorPage calc = new InsuranceCalculatorPage(driver);
+        InsuranceCalculatorPageForBachur calc = new InsuranceCalculatorPageForBachur(driver);
 
         try {
             test.info("נכנסים לאתר ביטוח לאומי");
@@ -38,86 +40,46 @@ public class CalculateForBachurTest {
             throw e;
         }
 
-        try {
-            test.info("לחיצה על תת תפריט 'דמי ביטוח לאומי'");
-            calc.clickOnSubMenu("דמי ביטוח לאומי");
-            test.pass("תת תפריט 'דמי ביטוח לאומי' נלחץ");
-        } catch (Exception e) {
-            test.fail("שגיאה בלחיצה על תת תפריט 'דמי ביטוח לאומי': " + e.getMessage());
-            throw e;
-        }
+        test.info("לחיצה על תת תפריט 'דמי ביטוח לאומי'");
+        calc.clickOnSubMenu("דמי ביטוח לאומי");
+        test.pass("תת תפריט 'דמי ביטוח לאומי' נלחץ");
 
-        try {
-            test.info("לחיצה על 'מחשבון לחישוב דמי הביטוח'");
-            calc.clickOnSubMenu("מחשבון לחישוב דמי הביטוח");
-            test.pass("נכנסנו למחשבון בהצלחה");
-        } catch (Exception e) {
-            test.fail("שגיאה בכניסה למחשבון: " + e.getMessage());
-            throw e;
-        }
+        test.info("לחיצה על 'מחשבון לחישוב דמי הביטוח'");
+        calc.clickOnSubMenu("מחשבון לחישוב דמי הביטוח");
+        test.pass("נכנסנו למחשבון בהצלחה");
 
-        try {
-            test.info("בחירת 'בחור'");
-            calc.selectBachur();
-            test.pass("'בחור' נבחר");
-        } catch (Exception e) {
-            test.fail("שגיאה בבחירת 'בחור': " + e.getMessage());
-            throw e;
-        }
+        test.info("בחירת 'בחור'");
+        calc.selectBachur();
+        test.pass("'בחור' נבחר");
 
-        try {
-            test.info("בחירת מגדר");
-            calc.selectGender();
-            test.pass("מגדר נבחר");
-        } catch (Exception e) {
-            test.fail("שגיאה בבחירת מגדר: " + e.getMessage());
-            throw e;
-        }
+        test.info("בחירת מגדר");
+        calc.selectGender();
+        test.pass("מגדר נבחר");
 
-        try {
-            test.info("הזנת תאריך לידה");
-            calc.enterBirthDate("1/11/2006");
-            test.pass("תאריך לידה הוזן");
-        } catch (Exception e) {
-            test.fail("שגיאה בהזנת תאריך לידה: " + e.getMessage());
-            throw e;
-        }
+        test.info("הזנת תאריך לידה");
+        calc.enterBirthDate("1/11/2006");
+        test.pass("תאריך לידה הוזן");
 
-        try {
-            test.info("לחיצה על כפתור המשך");
-            calc.clickContinueStep1();
-            test.pass("המשכנו בהצלחה לשלב הבא");
-        } catch (Exception e) {
-            test.fail("שגיאה בלחיצה על כפתור המשך: " + e.getMessage());
-            throw e;
-        }
+        test.info("לחיצה על כפתור המשך");
+        calc.clickContinueStep1();
+        test.pass("המשכנו בהצלחה לשלב הבא");
 
         try {
             test.info("בדיקת מעבר לצעד שני");
-            calc.isStepTwo();
+            calc.isStepTwo(); // בשיטה זו צריכה להיות assert פנימי או שתחזיר true/false
             test.pass("עברנו לצעד שני");
         } catch (AssertionError e) {
             test.fail("לא עברנו לצעד שני: " + e.getMessage());
             throw e;
         }
 
-        try {
-            test.info("בחירת 'לא מקבל קצבת נכות'");
-            calc.selectNoDisability();
-            test.pass("נבחרה האפשרות ללא קצבת נכות");
-        } catch (Exception e) {
-            test.fail("שגיאה בבחירת נכות: " + e.getMessage());
-            throw e;
-        }
+        test.info("בחירת 'לא מקבל קצבת נכות'");
+        calc.selectNoDisability();
+        test.pass("נבחרה האפשרות ללא קצבת נכות");
 
-        try {
-            test.info("מעבר לצעד הבא");
-            calc.clickContinueStep2();
-            test.pass("עברנו לשלב הסיום");
-        } catch (Exception e) {
-            test.fail("שגיאה במעבר לצעד הבא: " + e.getMessage());
-            throw e;
-        }
+        test.info("מעבר לצעד הבא");
+        calc.clickContinueStep2();
+        test.pass("עברנו לשלב הסיום");
 
         try {
             test.info("בדיקת מעבר למסך סיום");
@@ -128,15 +90,16 @@ public class CalculateForBachurTest {
             throw e;
         }
 
-        try {
-            test.info("שליפת תוצאות");
-            for (String result : calc.getResults()) {
-                test.info("תוצאה: " + result);
-            }
-            test.pass("תוצאות נשלפו בהצלחה");
-        } catch (Exception e) {
-            test.fail("שגיאה בשליפת התוצאות: " + e.getMessage());
-            throw e;
+        test.info("שליפת תוצאות");
+        assertAll(
+                () -> assertTrue(calc.isLabelWithAmountPresent("דמי ביטוח לאומי", "43"), "דמי ביטוח לאומי לא נמצא או שגוי"),
+                () -> assertTrue(calc.isLabelWithAmountPresent("דמי ביטוח בריאות", "120.00"), "דמי ביטוח בריאות לא נמצא או שגוי"),
+                () -> assertTrue(calc.isLabelWithAmountPresent("סך הכל דמי ביטוח לחודש", "163"), "סך הכל דמי ביטוח לחודש לא נמצא או שגוי")
+        );
+
+        for (String result : calc.getResults()) {
+            test.info("תוצאה: " + result);
         }
+        test.pass("תוצאות נשלפו בהצלחה");
     }
 }
