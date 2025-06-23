@@ -11,29 +11,30 @@ import reports.ExtentReportManager;
 
 @ExtendWith({ExtentReportExtension.class, WebDriverExtension.class})
 public class SearchTest {
+
     @Test
     public void testSearch() {
         WebDriver driver = DriverManager.getDriver();
-        driver.get("https://www.btl.gov.il/");
-
         ExtentTest test = ExtentReportManager.getTest();
-        test.info("We entered Btl website");
 
-        test.info("Search \"חישוב סכום דמי לידה ליום\"");
+        test.info("פתיחת האתר ביטוח לאומי");
+        driver.get("https://www.btl.gov.il/");
+        test.pass("האתר נפתח בהצלחה");
 
-        BtlPageObject btlPageObject = new BtlPageObject(DriverManager.getDriver());
+        test.info("מבצעים חיפוש של הביטוי: \"חישוב סכום דמי לידה ליום\"");
+        BtlPageObject btlPageObject = new BtlPageObject(driver);
         btlPageObject.initSearchBox("חישוב סכום דמי לידה ליום");
+        test.pass("החיפוש בוצע");
 
         String pageTitle = driver.getTitle();
-
-        System.out.println(pageTitle);
+        test.info("כותרת העמוד שהתקבלה: " + pageTitle);
 
         try {
             assertTrue(pageTitle.equals("חישוב סכום דמי לידה ליום - מחשבוני זכויות | ביטוח לאומי"));
-            test.info("The search was successful. The title is correct");
+            test.pass("תוצאת החיפוש נכונה – הטסט עבר");
         } catch (AssertionError e) {
-            test.info("The search was not successful. the title is " + pageTitle);
-            throw e; // חובה לזרוק כדי שהטסט ייכשל באמת
+            test.fail("כותרת לא תואמת – הטסט נכשל: " + pageTitle);
+            throw e;
         }
     }
 }

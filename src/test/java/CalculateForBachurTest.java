@@ -1,101 +1,134 @@
+import com.aventstack.extentreports.ExtentTest;
+import drivers.DriverManager;
 import enums.MENUS;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import junitExtensions.ExtentReportExtension;
+import junitExtensions.WebDriverExtension;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import pageObject.BtlPageObject;
+import reports.ExtentReportManager;
+import utils.ElementAction;
+import utils.WaitUtils;
 
-import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith({ExtentReportExtension.class, WebDriverExtension.class})
 public class CalculateForBachurTest {
-    private WebDriver driver;
-    private BtlPageObject btlPageObject;
-
-    @BeforeEach
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://btl.gov.il/");
-        btlPageObject = new BtlPageObject(driver);
-    }
 
     @Test
     public void insurancePremiumCalculationForBachur() {
+        WebDriver driver = DriverManager.getDriver();
+        ExtentTest test = ExtentReportManager.getTest();
+
+        test.info("נכנסים לאתר ביטוח לאומי");
+        driver.get("https://www.btl.gov.il/");
+
+        BtlPageObject btlPageObject = new BtlPageObject(driver);
+
+        test.info("לחיצה על תפריט עליון 'ביטוח'");
         btlPageObject.clickOnTopMenu(MENUS.INSURANCE);
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        test.info("לחיצה על תת תפריט 'דמי ביטוח לאומי'");
         btlPageObject.clickOnSubMenu("דמי ביטוח לאומי");
+
         try {
-            assertEquals(driver.getTitle(), "דמי ביטוח לאומי - דמי ביטוח | ביטוח לאומי");
-        } catch (AssertionError e) {
-            throw new RuntimeException("לא הגעת לדמי ביטוח לאומי");
+            WaitUtils.waitForTitleIs(driver, "דמי ביטוח לאומי - דמי ביטוח | ביטוח לאומי", 10);
+            test.pass("נכנסנו לדמי ביטוח לאומי");
+        } catch (Exception e) {
+            test.fail("לא הגעת לדמי ביטוח לאומי");
+            throw new RuntimeException(e);
         }
 
+        test.info("לחיצה על תת תפריט 'מחשבון לחישוב דמי הביטוח'");
         btlPageObject.clickOnSubMenu("מחשבון לחישוב דמי הביטוח");
+
         try {
-            assertEquals(driver.getTitle(), "חישוב דמי ביטוח עבור עצמאי, תלמיד, שוהה בחוץ לארץ ומי שלא עובד - דמי ביטוח | ביטוח לאומי");
-        } catch (AssertionError e) {
-            throw new RuntimeException("לא הגעת למחשבון דמי ביטוח");
+            WaitUtils.waitForTitleContains(driver, "חישוב דמי ביטוח", 10);
+            test.pass("נכנסנו למחשבון לחישוב דמי ביטוח");
+        } catch (Exception e) {
+            test.fail("לא הגעת למחשבון דמי ביטוח");
+            throw new RuntimeException(e);
         }
 
-        WebElement bachur = driver.findElement(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_employeType_2_lbl"));
+        test.info("בחירת 'בחור'");
+        By bachurLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_employeType_2");
+        WebElement bachur = WaitUtils.waitForClickAbility(driver, bachurLocator, 10);
         bachur.click();
 
-        WebElement gender = driver.findElement(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_Gender_0"));
+        test.info("בחירת מגדר");
+        By genderLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_Gender_0");
+        WebElement gender = WaitUtils.waitForClickAbility(driver, genderLocator, 20);
         gender.click();
 
-        WebElement date = driver.findElement(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_DynDatePicker_BirthDate_Date"));
+        test.info("הזנת תאריך לידה");
+        By dateLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_DynDatePicker_BirthDate_Date");
+        WebElement date = WaitUtils.waitForVisibilityLocated(driver, dateLocator, 10);
         date.sendKeys("1/11/2006");
 
-        WebElement continueButton = driver.findElement(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StartNavigationTemplateContainerID_StartNextButton"));
-        continueButton.click();
+        test.info("לחיצה על כפתור המשך");
+        By continueLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StartNavigationTemplateContainerID_StartNextButton");
+        WebElement continueBtn = WaitUtils.waitForClickAbility(driver, continueLocator, 20);
+        continueBtn.click();
 
+        test.info("בדיקת מעבר לצעד שני");
+        By stepTwoLocator = By.xpath("//*[contains(text(), 'צעד שני')]");
         try {
-            WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement finish = wait3.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'צעד שני')]")));
-            assertEquals(finish.getText().split("\n")[0], "צעד שני");
-        } catch (NoSuchElementException e) {
-            throw new RuntimeException("לא הגעת לצעד שני");
+            WebElement stepTwo = WaitUtils.waitForPresenceOfElement(driver, stepTwoLocator, 10);
+            assertEquals("צעד שני", stepTwo.getText().split("\n")[0]);
+            test.pass("עברנו לצעד שני בהצלחה");
+        } catch (Exception e) {
+            test.fail("לא הגעת לצעד שני");
+            throw new RuntimeException(e);
         }
+        // בחירת "לא מקבל קצבת נכות"
+        test.info("בחירת 'לא מקבל קצבת נכות'");
+        By disabilityLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_GetNechut_1");
+        WebElement disability = WaitUtils.waitForClickAbility(driver, disabilityLocator, 30);
+        ElementAction.scrollAndClick(driver, disability);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement disability = wait.until(ExpectedConditions.elementToBeClickable(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_rdb_GetNechut_1")));
-
-
+        // לחיצה על כפתור המשך
+        test.info("לחיצה על כפתור המשך לצעד הבא");
+        By nextStepLocator = By.id("ctl00_ctl43_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StepNavigationTemplateContainerID_StepNextButton");
         try {
-            WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement continueButton2 = wait2.until(ExpectedConditions.elementToBeClickable(By.id("ctl00_ctl44_g_642b1586_5c41_436a_a04c_e3b5ba94ba69_ctl00_InsuranceNotSachirWizard_StepNavigationTemplateContainerID_StepNextButton")));
-            continueButton2.click();
-        } catch (NoSuchElementException e) {
-            throw new RuntimeException("לא הגעת לאלמנט כפתור ההמשך");
+            WebElement nextButton = WaitUtils.waitForClickAbility(driver, nextStepLocator, 10);
+            nextButton.click();
+            test.pass("לחיצה על כפתור ההמשך בוצעה בהצלחה");
+        } catch (Exception e) {
+            test.fail("לא הצלחנו ללחוץ על כפתור ההמשך לצעד הבא");
+            throw new RuntimeException(e);
         }
 
+        // בדיקה שהגענו למסך הסיום
+        test.info("בדיקת מעבר למסך סיום");
+        By finishLocator = By.xpath("//*[contains(text(), 'סיום')]");
         try {
-            WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement finish2 = wait3.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'סיום')]")));
-            assertEquals(finish2.getText().split("\n")[0], "סיום");
-        } catch (NoSuchElementException e) {
-            throw new RuntimeException("לא הגעת לסיום");
+            WebElement finish = WaitUtils.waitForPresenceOfElement(driver, finishLocator, 10);
+            assertEquals("סיום", finish.getText().split("\n")[0]);
+            test.pass("הגענו למסך הסיום בהצלחה");
+        } catch (Exception e) {
+            test.fail("לא הגעת למסך הסיום");
+            throw new RuntimeException(e);
         }
 
-        System.out.println("Success");
-
-        //מקבל קצבת נכות
-        WebElement res = driver.findElement(By.className("CalcResult"));
-        List<WebElement> resList = res.findElements(By.tagName("li"));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
+        // תוצאה: קצבת נכות
+        test.info("שליפת תוצאות חישוב מהמסך");
+        try {
+            WebElement resultContainer = WaitUtils.waitForVisibilityLocated(driver, By.className("CalcResult"), 10);
+            List<WebElement> resultItems = resultContainer.findElements(By.tagName("li"));
+            for (WebElement li : resultItems) {
+                test.info("תוצאה: " + li.getText());
+            }
+            test.pass("תוצאות נשלפו בהצלחה");
+        } catch (Exception e) {
+            test.fail("נכשל באחזור תוצאות החישוב");
+            throw new RuntimeException(e);
         }
+
+        test.info("סיום תרחיש בדיקת חישוב בחור");
     }
 }
