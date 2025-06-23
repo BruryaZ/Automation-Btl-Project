@@ -54,7 +54,7 @@ public class InsuranceCalculateTest {
         test.info("לחיצה על כפתור 'המשך'");
         calc.setContinue1();
 
-        test.info("הכנסת משכורות לחדשי עבודה אחרונים");
+        test.info("הכנסת משכורות לחצי שנה אחרונה");
         List<Integer> salaries = new ArrayList<>(Collections.nCopies(6, 30000));
         calc.setSalaries(salaries);
 
@@ -63,23 +63,38 @@ public class InsuranceCalculateTest {
 
         test.info("בדיקה שעלה דף 'תוצאות חישוב'");
         WebElement results;
-        try{
+        try {
             results = calc.isCalcResult();
-            test.pass("תוצאות החישוב מוצגות.");
-        }
-        catch (Exception e) {
+            test.pass("תוצאות החישוב מוצגות בהצלחה");
+        } catch (Exception e) {
             test.fail("לא מוצגות תוצאות החישוב!");
             throw e;
         }
 
-        test.info("בדיקת תוצאות החישוב");
+        test.info("בדיקת תוצאות החישוב בטקסט המוצג");
+        String resultText = calc.getResults().getText();
 
-        String resultText = results.getText();
+        try {
+            assertAll(
+                    () -> {
+                        assertTrue(resultText.contains("שכר יומי ממוצע לצורך חישוב דמי אבטלה"), "שכר יומי ממוצע לא הופיע");
+                        test.pass("שכר יומי ממוצע נמצא");
+                    },
+                    () -> {
+                        assertTrue(resultText.contains("דמי אבטלה ליום"), "דמי אבטלה ליום לא הופיע");
+                        test.pass("דמי אבטלה ליום נמצא");
+                    },
+                    () -> {
+                        assertTrue(resultText.contains("דמי אבטלה לחודש"), "דמי אבטלה לחודש לא הופיע");
+                        test.pass("דמי אבטלה לחודש נמצא");
+                    }
+            );
+        } catch (AssertionError e) {
+            test.fail("חלק מהתוצאות לא הופיעו: " + e.getMessage());
+            throw e;
+        }
 
-        assertAll(
-                () -> assertTrue(resultText.contains("שכר יומי ממוצע לצורך חישוב דמי אבטלה"), "שכר יומי ממוצע לא הופיע"),
-                () -> assertTrue(resultText.contains("דמי אבטלה ליום"), "דמי אבטלה ליום לא הופיע"),
-                () -> assertTrue(resultText.contains("דמי אבטלה לחודש"), "דמי אבטלה לחודש לא הופיע")
-        );
+        test.pass("כל תוצאות החישוב אומתו בהצלחה!");
     }
+
 }

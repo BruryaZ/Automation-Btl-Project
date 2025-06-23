@@ -31,18 +31,32 @@ public class ExtentReportExtension implements BeforeEachCallback, AfterTestExecu
 
     @Override
     public void afterTestExecution(ExtensionContext context) {
-        if(context.getExecutionException().isPresent()){
+        String methodName = context.getTestMethod().get().getName();
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
+        String filename = methodName + "_" + timestamp + ".png";
+        String fullPath = "./target/ExtentReport/screenshot/" + filename;
+        String relativePath = "./screenshot/" + filename;
+
+        boolean isTakeScreenshot = ScreenshotUtils.takeScreenshot(DriverManager.getDriver(), fullPath);
+
+        if (context.getExecutionException().isPresent()) {
+            // במקרה של כשלון
             String cause = context.getExecutionException().get().getMessage();
-            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
-            String screenshotPath = "./target/ExtentReport/screenshot/" + context.getTestMethod().get().getName() + "_" + timestamp + ".png";
-            boolean isTakeScreenshot = ScreenshotUtils.takeScreenshot(DriverManager.getDriver(), screenshotPath);
-            String relativePath = "./screenshot/" + context.getTestMethod().get().getName() + "_" + timestamp + ".png";
 
             if (isTakeScreenshot) {
                 extentTest.fail(cause, MediaEntityBuilder.createScreenCaptureFromPath(relativePath).build());
             } else {
                 extentTest.fail("Test failed but could not take screenshot");
                 extentTest.fail(cause);
+            }
+
+        } else {
+            // במקרה של הצלחה
+            if (isTakeScreenshot) {
+                extentTest.pass("Test passed",
+                        MediaEntityBuilder.createScreenCaptureFromPath(relativePath).build());
+            } else {
+                extentTest.pass("Test passed but could not take screenshot");
             }
         }
     }

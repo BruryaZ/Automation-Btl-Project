@@ -9,7 +9,7 @@ import utils.WaitUtils;
 import java.util.List;
 
 public class InsuranceCalculatorPage extends BtlPageObject {
-    @FindBy(xpath = "//*[@id=\"ctl00_Topmneu_Benefits\"]/div/div[1]/div[5]/ul/li[1]/a")
+    @FindBy(xpath = "//a[contains(text(), 'אבטלה')]")
     private WebElement unemployment;
 
     @FindBy(xpath = "//*[@id=\"mainContent\"]/div[1]/div[2]/span/div[2]/div[3]/a/strong")
@@ -34,6 +34,9 @@ public class InsuranceCalculatorPage extends BtlPageObject {
     private WebElement continue2;
 
     @FindBy(xpath = "//*[@id=\"ctl00_ctl43_g_2ccdbe03_122a_4c30_928f_60300c0df306_ctl00_AvtalaWizard_StepDiv3\"]/h3")
+    private WebElement isCalcResults;
+
+    @FindBy(className = "CalcResult")
     private WebElement calcResults;
 
     public InsuranceCalculatorPage(WebDriver driver) {
@@ -41,8 +44,12 @@ public class InsuranceCalculatorPage extends BtlPageObject {
         this.driver = driver;
     }
 
+    public void EnterToOptions(String opt) {
+        WaitUtils.waitForVisibilityLocated(driver, By.xpath("//a[contains(text(), '" + opt + "')]"), 30).click();
+    }
+
     public void chooseUnemployment() {
-        WaitUtils.waitForClickAbilityByElement(driver, unemployment, 10).click();
+        WaitUtils.waitForClickAbilityByElement(driver, unemployment, 30).click();
     }
 
     public void chooseCalcUnemployment() {
@@ -58,29 +65,29 @@ public class InsuranceCalculatorPage extends BtlPageObject {
     }
 
     public void chooseOn28() {
-        WaitUtils.waitForClickAbilityByElement(driver, on28, 10).click();
+        WaitUtils.waitForClickAbilityByElement(driver, on28, 30).click();
     }
 
-    public void setContinue1(){
+    public void setContinue1() {
         WaitUtils.waitForClickAbilityByElement(driver, continue1, 10).click();
     }
 
-    public void setSalaries(List<Integer> salariesList){
+    public void setSalaries(List<Integer> salariesList) {
         List<WebElement> salaries = WaitUtils.waitForMultipleElementsInElement(driver, fathersSalaries, By.className("txtbox_sallary"), 30);
         for (int i = 0; i < salaries.size(); i++) {
             salaries.get(i).sendKeys(salariesList.get(i).toString());
         }
     }
 
-    public void setContinue2(){
+    public void setContinue2() {
         WaitUtils.waitForClickAbilityByElement(driver, continue2, 10).click();
     }
 
     public WebElement isCalcResult() {
-          return  WaitUtils.waitForVisibility(driver, calcResults, 10);
+        return WaitUtils.waitForVisibility(driver, isCalcResults, 10);
     }
 
-    public void checkCalcResult(){
-
+    public WebElement getResults() {
+        return WaitUtils.waitForVisibility(driver, calcResults, 10);
     }
 }
