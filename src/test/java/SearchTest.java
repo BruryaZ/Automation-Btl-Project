@@ -27,6 +27,7 @@ public class SearchTest {
         String pageTitle = driver.getTitle();
 
         System.out.println(pageTitle);
+
         try {
             assertTrue(pageTitle.equals("חישוב סכום דמי לידה ליום - מחשבוני זכויות | ביטוח לאומי"));
             test.info("The search was successful. The title is correct");
