@@ -20,5 +20,3 @@ public class BranchesEntryPage extends BtlPageObject {
         return new BranchesPage(driver);
     }
 }
-
-

@@ -21,10 +21,10 @@ public class SearchInPensionAndBenefit {
     @ParameterizedTest(name = "בדיקת ניתוב עבור: {0}")
     @CsvSource({
             "נפגעי פוליו",
-//            "נפגעי גזזת",
-//            "נפגעי עירוי דם",
+            "נפגעי גזזת",
+            "נפגעי עירוי דם",
     })
-//    @ValueSource(strings = {"שיקום מקצועי", "ילד נכה"})
+    @ValueSource(strings = {"שיקום מקצועי", "ילד נכה"})
     public void searchTest(String input) {
         ExtentTest test = ExtentReportManager.getTest();
         WebDriver driver = DriverManager.getDriver();
